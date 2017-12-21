@@ -4,6 +4,8 @@ $(document).ready(start);
 
 function start () {
     $('.santa').on('click', canSantaFly);
+    $('#addNewGift').on('click', addNewGift);
+    getGifts();
 }//end start
 
 function canSantaFly() {
@@ -17,7 +19,7 @@ function canSantaFly() {
             getGifts();
         }//end success
     });//end ajax
-}
+} //end canSantaFly
 
 function getGifts () {
     $.ajax({
@@ -29,4 +31,24 @@ function getGifts () {
             console.log('get /gifts response: ', response);
         }//end success
     });//end ajax
-}
+} //end getGifts
+
+function addNewGift () {
+    let newGift = $('#giftName').val();
+    $('#giftName').val('');
+    console.log('new gift:', newGift);
+    
+    $.ajax({
+        method: 'POST',
+        url: '/gifts',
+        data: {newGift: newGift},
+        //request went to the server..waiting for response
+        success: function(response) { //got a response
+            console.log('added a new gift', response);
+            getGifts();
+        },
+        error: function (response) {
+            console.log('error adding gift!', response);   
+        } // if server can't find route
+    });
+} //end addNewGift
